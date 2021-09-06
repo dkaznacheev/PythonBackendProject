@@ -28,6 +28,3 @@ class TestPostRepository(TestCase):
         self.assertEqual(0, feed[0].id)
         self.assertEqual(1, feed[1].id)
         self.assertTrue(feed[0].creation_time < feed[1].creation_time)
-
-    def test_fail(self):
-        self.fail("This should stop CI")
