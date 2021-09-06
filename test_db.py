@@ -6,7 +6,9 @@ from db import PostRepository
 class TestPostRepository(TestCase):
     def test_posts_are_empty(self):
         posts = PostRepository()
-        self.assertEqual(0, len(posts.get_posts()), "There should be no posts at the start")
+        self.assertEqual(0,
+                         len(posts.get_posts()),
+                         "There should be no posts at the start")
 
     def test_add_post(self):
         posts = PostRepository()
@@ -26,3 +28,6 @@ class TestPostRepository(TestCase):
         self.assertEqual(0, feed[0].id)
         self.assertEqual(1, feed[1].id)
         self.assertTrue(feed[0].creation_time < feed[1].creation_time)
+
+    def test_fail(self):
+        self.fail("This should stop CI")
