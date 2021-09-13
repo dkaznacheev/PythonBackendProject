@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+service PostCounter {
+  rpc GetPostCount (PostCountRequest) returns (PostCountResponse) {}
+  rpc PostMessage (Post) returns (Ok) {}
+}
+
+message PostCountRequest {
+  optional string username = 1;
+}
+
+message PostCountResponse {
+  int64 count = 1;
+}
+
+message Post {
+  int64 id = 1;
+  string username = 2;
+}
+
+message Ok {}

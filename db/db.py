@@ -22,3 +22,4 @@ class PostRepository:
                                text=text,
                                creation_time=datetime.datetime.now()))
         self.post_counter += 1
+        return self.post_counter
