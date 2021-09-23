@@ -5,3 +5,4 @@ pycodestyle~=2.7.0
 grpcio~=1.39.0
 grpcio-tools~=1.39.0
 futures3~=1.0.0
+requests~=2.26.0

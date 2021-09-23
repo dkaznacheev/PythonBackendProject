@@ -25,4 +25,6 @@ jobs:
       - name: Generate grpc code
         run: python -m grpc_tools.protoc --proto_path=proto --grpc_python_out=. --python_out=. postcount.proto
       - name: Run tests with unittest
-        run: python -m unittest
+        run: |
+          python -m unittest discover .
+          python -m unittest discover db

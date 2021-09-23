@@ -7,6 +7,7 @@ class Post(BaseModel):
     username: str
     text: str
     creation_time: datetime.datetime
+    likes: int
 
 
 class PostRequest(BaseModel):
