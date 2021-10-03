@@ -1,15 +1,59 @@
 import datetime
-
-from fastapi import FastAPI, HTTPException
+import typing
 from typing import List
+
+import strawberry
+from fastapi import FastAPI, HTTPException
+from strawberry import Schema
+from strawberry.asgi import GraphQL
+
 from data import Post, PostRequest
 from db.comments import CommentRepository
 from db.posts import PostRepository
+from users.users import UserRepository
 
 app = FastAPI()
 
 posts = PostRepository()
 comments = CommentRepository(posts)
+users = UserRepository()
+
+
+@strawberry.type
+class User:
+    username: str
+    posts: typing.List[Post]
+    creation_time: datetime.datetime
+
+
+@strawberry.type
+class Query:
+    @strawberry.field
+    def users(self) -> typing.List[User]:
+        return [User(
+            username=user.username,
+            posts=posts.get_posts(for_user=user.username),
+            creation_time=user.creation_time
+        ) for user in users.list_users()]
+
+
+@strawberry.type
+class Mutation:
+    @strawberry.mutation
+    def add_user(self, username: str) -> User:
+        creation_time = users.add_user(username)
+        return User(
+            username=username,
+            posts=[],
+            creation_time=creation_time
+        )
+
+
+schema = Schema(query=Query, mutation=Mutation)
+graphql_app = GraphQL(schema)
+
+app.add_route("/users", graphql_app)
+app.add_websocket_route("/users", graphql_app)
 
 
 @app.get("/feed", response_model=List[Post])

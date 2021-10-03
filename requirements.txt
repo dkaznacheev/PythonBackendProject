@@ -4,3 +4,4 @@ pydantic~=1.8.2
 pycodestyle~=2.7.0
 futures3~=1.0.0
 requests~=2.26.0
+strawberry-graphql~=0.80.2
