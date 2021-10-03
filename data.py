@@ -1,10 +1,8 @@
 import datetime
 
-import strawberry
 from pydantic import BaseModel
 
 
-@strawberry.type
 class Post(BaseModel):
     id: int
     username: str
@@ -13,7 +11,6 @@ class Post(BaseModel):
     likes: int
 
 
-@strawberry.type
 class Comment(BaseModel):
     id: int
     post_id: int

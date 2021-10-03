@@ -10,6 +10,7 @@ from strawberry.asgi import GraphQL
 from data import Post, PostRequest
 from db.comments import CommentRepository
 from db.posts import PostRepository
+from users_graphql.model import UserModel, to_post_model
 from users.users import UserRepository
 
 app = FastAPI()
@@ -20,19 +21,12 @@ users = UserRepository()
 
 
 @strawberry.type
-class User:
-    username: str
-    posts: typing.List[Post]
-    creation_time: datetime.datetime
-
-
-@strawberry.type
 class Query:
     @strawberry.field
-    def users(self) -> typing.List[User]:
-        return [User(
+    def users(self) -> typing.List[UserModel]:
+        return [UserModel(
             username=user.username,
-            posts=posts.get_posts(for_user=user.username),
+            posts=to_post_model(posts.get_posts(for_user=user.username)),
             creation_time=user.creation_time
         ) for user in users.list_users()]
 
@@ -40,9 +34,9 @@ class Query:
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def add_user(self, username: str) -> User:
+    def add_user(self, username: str) -> UserModel:
         creation_time = users.add_user(username)
-        return User(
+        return UserModel(
             username=username,
             posts=[],
             creation_time=creation_time

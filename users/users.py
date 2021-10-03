@@ -4,23 +4,23 @@ import typing
 from pydantic import BaseModel
 
 
-class UserInternal(BaseModel):
+class User(BaseModel):
     username: str
     creation_time: datetime.datetime
 
 
 class UserRepository:
-    users: typing.Dict[str, UserInternal]
+    users: typing.Dict[str, User]
 
     def __init__(self):
         self.users = {}
 
     def add_user(self, username):
-        if self.users[username]:
+        if username in self.users:
             raise ValueError(f"Username {username} already taken")
 
         creation_time = datetime.datetime.now()
-        self.users[username] = UserInternal(
+        self.users[username] = User(
             username=username,
             creation_time=creation_time
         )
