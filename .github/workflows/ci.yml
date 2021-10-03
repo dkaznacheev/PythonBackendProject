@@ -22,8 +22,6 @@ jobs:
           pip install -r requirements.txt
       - name: Check codestyle
         run: python -m pycodestyle *.py
-      - name: Generate grpc code
-        run: python -m grpc_tools.protoc --proto_path=proto --grpc_python_out=. --python_out=. postcount.proto
       - name: Run tests with unittest
         run: |
           python -m unittest discover .

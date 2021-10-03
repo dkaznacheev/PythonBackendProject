@@ -1,17 +1,15 @@
 import datetime
 
-import grpc
 from fastapi import FastAPI, HTTPException
 from typing import List
-from postcount_pb2_grpc import PostCounterStub
 from data import Post, PostRequest
-from db.db import PostRepository
+from db.comments import CommentRepository
+from db.posts import PostRepository
 
 app = FastAPI()
 
 posts = PostRepository()
-grpc_channel = grpc.insecure_channel('localhost:50051')
-postcount_stub = PostCounterStub(grpc_channel)
+comments = CommentRepository(posts)
 
 
 @app.get("/feed", response_model=List[Post])
@@ -33,12 +31,14 @@ async def like(post_id: int):
 @app.post("/posts/", response_model=int)
 async def send_post(request: PostRequest):
     post_id = posts.add_post(request.username, request.text)
-    # not needed in this hw
-    # postcount_stub.PostMessage(
-    #     postcount.Post(id=post_id, username=request.username))
     return post_id
 
 
-@app.on_event("shutdown")
-async def on_shutdown():
-    grpc_channel.close()
+@app.get("/posts/{post_id}/comments/")
+async def get_comments(post_id: int):
+    return comments.get_comments(post_id)
+
+
+@app.post("/posts/{post_id}/comments/")
+async def add_comment(post_id: int, request: PostRequest):
+    return comments.add_comment(post_id, request.username, request.text)

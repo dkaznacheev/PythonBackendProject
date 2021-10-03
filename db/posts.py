@@ -36,3 +36,9 @@ class PostRepository:
             return False
         post.likes += 1
         return True
+
+    def contains_post(self, post_id):
+        for post in self.posts:
+            if post.id == post_id:
+                return True
+        return False

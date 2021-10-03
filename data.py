@@ -13,3 +13,11 @@ class Post(BaseModel):
 class PostRequest(BaseModel):
     username: str
     text: str
+
+
+class Comment(BaseModel):
+    id: int
+    post_id: int
+    username: str
+    text: str
+    creation_time: datetime.datetime

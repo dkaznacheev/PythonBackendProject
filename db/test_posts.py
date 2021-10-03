@@ -1,7 +1,7 @@
 import datetime
 from unittest import TestCase
 
-from db import PostRepository
+from posts import PostRepository
 
 
 class TestPostRepository(TestCase):
